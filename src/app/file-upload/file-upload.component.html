@@ -1,0 +1,58 @@
+<h2>Upload Specification File:</h2>
+<br>
+<input type="file" accept="application/JSON" (change)="fileSelected($event)">
+<br><br>
+<button (click)="uploadSpecification()">Submit</button>
+<br><br>
+<div *ngIf="specData.length>0; else message">
+  <p>List of specifications uploaded:</p>
+  <div *ngFor="let spec of specNames">
+    <ul>
+      <li>
+        {{spec}}
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- <div *ngFor="let specs of specData"> -->
+<ng-template #message>
+  <p>No specs uploaded yet; please upload a spec before uploading a file!</p>
+</ng-template>
+<br>
+<h2>Upload Flat File:</h2>
+<br>
+<input type="file" accept=".txt" (input)="fileSelected($event)">
+<!--input box for specifications? two way data binding -->
+<!-- <input type="text" (change)="specSelected($event)"> -->
+<select id="mySpecs" (change)="specSelected($event)">
+  <option value="default">Specifications</option>
+  <option *ngFor="let spec of specNames" value={{spec}}>{{spec}}</option>
+</select>
+<br><br>
+<div *ngIf="fileData">
+  {{fileData}}
+</div>
+<button (click)="uploadFile()">Submit</button>
+<br><br>
+<h2>Get All Files By Specification Type</h2>
+<br>
+<select id="mySpecs" (change)="specTypeSelected($event)">
+  <option value="default">Specifications</option>
+  <option *ngFor="let spec of specNames" value={{spec}}>{{spec}}</option>
+</select>
+<br><br>
+<button (click)="getFilesBySpecificationType()">Submit</button>
+<br><br>
+<div *ngIf="filesBySpecData.length>0">{{filesBySpecData}}</div>
+<br>
+<h2>Get All Files From User</h2>
+<br>
+<button (click)="getFilesByUser()">Submit</button>
+<br><br>
+<div *ngIf="filesByUserData; else nofilesmessage">
+  {{filesByUserData}}
+</div>
+<br>
+<ng-template #nofilesmessage>
+  <p>You haven't uploaded any files yet.</p>
+</ng-template>
