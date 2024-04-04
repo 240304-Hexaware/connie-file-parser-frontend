@@ -30,7 +30,8 @@ export class FileUploadComponent {
   currentUserId: string = '1';
   filesByUserData: Array<string> = [];
   fileNames: Array<string> = [];
-
+  noFilesMessage: string = '';
+  noSpecsMessage: string = '';
   constructor(httpClient: HttpClient) {
     /* the HttpClient needs to be provided, see app.config.ts */
     this.httpClient = httpClient;
@@ -64,7 +65,7 @@ export class FileUploadComponent {
       observe: "response",
       responseType: 'text',
       params: new HttpParams({
-        fromString: 'userId=1'
+        fromString: 'userId=' + this.currentUserId
       }),
       headers: new HttpHeaders({
         username: "ctsang"//for our trusting system
@@ -89,7 +90,7 @@ export class FileUploadComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.log("error: ", error);
-        alert(error.message);
+        alert("A specification of that name has already been uploaded.");
       },
       complete: () => {
         console.log("Http response complete!")
@@ -113,7 +114,7 @@ export class FileUploadComponent {
       observe: "body",
       responseType: 'text',
       params: new HttpParams({
-        fromString: 'userId=1&specName=' + this.selectedSpec
+        fromString: 'userId=' + this.currentUserId + '&specName=' + this.selectedSpec
       }),
       headers: new HttpHeaders({
         username: 'ctsang'//for our trusting system
@@ -168,6 +169,7 @@ export class FileUploadComponent {
     response.subscribe({
       next: (data: any) => {
         this.filesBySpecData = data.map((obj: any) => JSON.stringify(obj));
+        this.noSpecsMessage = "You haven't uploaded any files with this specification type yet."
       },
       error: (error: HttpErrorResponse) => {
         console.log("error: ", error);
@@ -185,7 +187,8 @@ export class FileUploadComponent {
     response.subscribe({
       next: (data: any) => {
         this.filesByUserData = data.map((obj: any) => JSON.stringify(obj));
-        this.fileNames = this.filesByUserData.map((json: string) => JSON.parse(json).name);
+        this.noFilesMessage = "You haven't uploaded any files yet. Please upload a file first."
+
       },
       error: (error: HttpErrorResponse) => {
         console.log("error: ", error);
@@ -200,19 +203,6 @@ export class FileUploadComponent {
 
   ngOnInit() {
     this.getSpecifications()
-  }
-
-  saveFile() {
-    if (this.downloadFile == undefined) {
-      alert("No file to download!");
-      return;
-    }
-
-    const linkElement = document.createElement("a");
-    linkElement.href = URL.createObjectURL(this.downloadFile);
-    linkElement.download = "download.file";
-    linkElement.click();
-    linkElement.remove();
   }
 
 }

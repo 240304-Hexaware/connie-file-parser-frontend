@@ -43,16 +43,19 @@
 <br><br>
 <button (click)="getFilesBySpecificationType()">Submit</button>
 <br><br>
-<div *ngIf="filesBySpecData.length>0">{{filesBySpecData}}</div>
+<div *ngIf="filesBySpecData.length>0; else nospecsmessage">{{filesBySpecData}}</div>
+<ng-template #nospecsmessage>
+  <p>{{noSpecsMessage}}</p>
+</ng-template>
 <br>
 <h2>Get All Files From User</h2>
 <br>
 <button (click)="getFilesByUser()">Submit</button>
 <br><br>
-<div *ngIf="filesByUserData; else nofilesmessage">
+<div *ngIf="filesByUserData.length > 0; else nofilesmessage">
   {{filesByUserData}}
 </div>
-<br>
 <ng-template #nofilesmessage>
-  <p>You haven't uploaded any files yet.</p>
+  <p>{{noFilesMessage}}</p>
 </ng-template>
+<br>
